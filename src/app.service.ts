@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Request, UseGuards } from '@nestjs/common';
+import { JwtAuthGurd } from './auth/jwt-auth.gurd';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello man!';
+  async getHello(@Request() req): Promise<string> {
+    return `Hello world!`;
   }
 }
