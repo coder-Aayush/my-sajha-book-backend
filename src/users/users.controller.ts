@@ -68,4 +68,12 @@ export class UsersController {
       return new HttpException('Phone number is required', 400);
     }
   }
+
+  // forget password
+  @Post('forget-password')
+  @HttpCode(200)
+  forgetPassword(@Body() body: any): Promise<any> {
+    return this.usersService.forgetPassword(body);
+  }
+  
 }

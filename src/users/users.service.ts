@@ -37,6 +37,14 @@ export class UsersService {
     });
   }
 
+  async getUserFromJWTToken(token: string): Promise<User | null> {
+    // const {email} = 
+    return await this.prisma.user.findUnique({
+      where: {
+        token: token
+      }
+    });
+
   findAll() {
     return `This action returns all users`;
   }
@@ -63,5 +71,14 @@ export class UsersService {
   }
 
 
+  // forgetPassword
+  async forgetPassword(email: string) {
+    const user = await this.findUserByEmail(email);
+    if (user) {
+      // send email
+      return { message: 'Email sent' };
+    }
+    return { message: 'Email not found' };
+  }
 
 }
