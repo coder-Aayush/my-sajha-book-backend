@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseInterceptors, UploadedFile, UseGuards, Req, BadRequestException, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseInterceptors, UploadedFile, UseGuards, Req, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -50,7 +50,7 @@ export class UsersController {
     
     return await this.usersService.setProfile(file, email, phone_number);
     }else {
-      return new HttpException('Phone number is required', 400);
+      return new HttpException('Phone number is required', HttpStatus.NOT_FOUND);
     }
   }
 

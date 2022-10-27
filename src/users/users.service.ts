@@ -1,4 +1,4 @@
-import { Body, Global, Injectable, Request, UploadedFile } from '@nestjs/common';
+import { Body, Global, HttpException, Injectable, Request, UploadedFile } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -25,6 +25,9 @@ export class UsersService {
   }
 
   async setProfile(@UploadedFile() file: Express.Multer.File, email: string, phoneNumber) {
+   if (!file) {
+      throw new HttpException('Image is required', 400);
+   }
     const profileImage = await this.cloudinaryService.uploadFile(file);
     return await this.prisma.user.update({
       where: {

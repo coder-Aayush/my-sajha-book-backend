@@ -35,8 +35,8 @@ export class AuthService {
     }
 
 
-    async login(loginUserDto : LoginUserDto): Promise<{ access_token: string, user: User }> {
-        const  hasUser = await this.usersService.checkIfUserExist(loginUserDto.email);
+    async login(loginUserDto : LoginUserDto): Promise<{ access_token: string, user: any }> {
+        const hasUser = await this.usersService.checkIfUserExist(loginUserDto.email);
         if (!hasUser){
             throw new HttpException('No User Associate with provided Email', HttpStatus.NOT_FOUND);
         }
@@ -45,11 +45,16 @@ export class AuthService {
             email
         }
 
-        const user = await this.usersService.findUserByEmail(loginUserDto.email);
+        const {id, username, role} : User= await this.usersService.findUserByEmail(loginUserDto.email);
 
         return {
             access_token: this.jwtService.sign(payload),
-            user,
+            user: {
+                id,
+                username,
+                email
+                
+            }
         }
     }
 
