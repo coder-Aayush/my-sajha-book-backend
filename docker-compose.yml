@@ -1,0 +1,24 @@
+version: '1'
+services:
+  nest:
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    container_name: sajhabook_backend
+    image: sajhabook_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+  postgres: 
+    image: postgres:9.6
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_USER: myuser
+      POSTGRES_DB: postgres

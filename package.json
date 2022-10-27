@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "generate": "prisma migrate dev",
     "seeder": "ts-node prisma/seed.ts",
