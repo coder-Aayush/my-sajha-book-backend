@@ -14,7 +14,7 @@ export class AuthController {
     @Post('/login')
     @UseGuards(LocalAuthGuard)
     async login(@Body() body: LoginUserDto, ): Promise<User | any> {
-        const { access_token, user } = await this.authService.login(body.email);
+        const { access_token, user } = await this.authService.login(body);
         return { access_token, user};
     }
 
@@ -22,7 +22,7 @@ export class AuthController {
     @UsePipes(LocalAuthGuard)
     async signup(@Body() body: CreateUserDto): Promise<User | any> {
         const user = await this.authService.signup(body);
-        return user;
+        return { user };
     }
 
 }

@@ -18,7 +18,7 @@ export class UsersService {
         email: createUserDto.email,
         name: createUserDto.name,
         password: createUserDto.password,
-        token: createUserDto.token,
+        token: createUserDto.token ?? '',
         username: createUserDto.email.split('@')[0]+Math.floor(Math.random() * 1000),
       }
     });
@@ -37,13 +37,6 @@ export class UsersService {
     });
   }
 
-  async getUserFromJWTToken(token: string): Promise<User | null> {
-    // const {email} = 
-    return await this.prisma.user.findUnique({
-      where: {
-        token: token
-      }
-    });
 
   findAll() {
     return `This action returns all users`;
@@ -57,14 +50,21 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  // check if user email exist
+  async checkIfUserExist(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: email
+      }
+    });
+    if (user) {
+      return true;
+    }
+    return false;
   }
-
+  
+  
 
   async signup(createUserDto: CreateUserDto) {
     return this.create(createUserDto);

@@ -30,21 +30,6 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
-  }
-
-  @Post('signup')
-  @HttpCode(200)
-  signup(@Body() createUserDto: CreateUserDto): Promise<any> {
-    return this.usersService.signup(createUserDto);
-  }
 
   @Post('profile-setup')
   @HttpCode(200)

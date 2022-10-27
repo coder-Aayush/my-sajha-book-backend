@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "generate": "prisma migrate dev",
+    "seeder": "ts-node prisma/seed.ts",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -39,7 +40,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "prisma": "^4.3.1",
+    "prisma": "^4.4.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
@@ -87,7 +88,7 @@
     "testEnvironment": "node"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts",
+    "seeder": "ts-node prisma/seed.ts",
     "generate": "prisma generate"
   }
 }

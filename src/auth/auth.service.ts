@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     async hasPassword(password: string) {
         return (await bcrypt.hash(password, 12));
     }
+
 
     async comparePassword(password: string, storedPassword: string): Promise<boolean | undefined> {
         // console.log("hello hi ", password, storedPassword);
@@ -33,12 +35,17 @@ export class AuthService {
     }
 
 
-   async login(email: string): Promise<{ access_token: string, user: User }> {
+    async login(loginUserDto : LoginUserDto): Promise<{ access_token: string, user: User }> {
+        const  hasUser = await this.usersService.checkIfUserExist(loginUserDto.email);
+        if (!hasUser){
+            throw new HttpException('No User Associate with provided Email', HttpStatus.NOT_FOUND);
+        }
+        const {email, password} = loginUserDto;
         const payload = {
             email
         }
 
-        const user = await this.usersService.findUserByEmail(email);
+        const user = await this.usersService.findUserByEmail(loginUserDto.email);
 
         return {
             access_token: this.jwtService.sign(payload),
@@ -48,6 +55,9 @@ export class AuthService {
 
 
     async signup(createUserDto: CreateUserDto): Promise<User> {
+        if (await this.usersService.checkIfUserExist(createUserDto.email)) {
+            throw new HttpException('User already exists', HttpStatus.NOT_FOUND);
+        }
         const salt = await bcrypt.genSalt();
         const password = await bcrypt.hash(createUserDto.password, salt);
         const { email, name } = createUserDto;
